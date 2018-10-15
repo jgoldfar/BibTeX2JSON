@@ -1,0 +1,42 @@
+sudo: false
+
+language: python
+
+# TODO: Test on OSX as well. See https://github.com/travis-ci/travis-ci/issues/2312
+#os:
+#  - linux
+#  - osx
+
+# Run each tox environment separately
+matrix:
+  include:
+    - name: "Python 2.7 Unit Test"
+      python: '2.7'
+      env: TOX_ENV=py27
+    - name: "Python 3.4 Unit Test"
+      python: '3.4'
+      env: TOX_ENV=py34
+    - name: "Python 3.6 Unit Test"
+      python: '3.6'
+      env: TOX_ENV=py36
+#    - name: "Python 3.7 Unit Test" # Python 3.7 is not available on Travis yet
+#      python: '3.7'
+#      env: TOX_ENV=py37
+    - name: "Pypy Unit Test"
+      python: pypy
+      env: TOX_ENV=pypy
+    - name: "Pep8 Test"
+      python: 2.7
+      env: TOX_ENV=pep8
+
+# Cache pip requirements for faster builds
+cache:
+  directories:
+    - $HOME/.cache/pip
+
+install:
+  # Python test requirements
+  - pip install tox
+
+script:
+  - tox -e $TOX_ENV
